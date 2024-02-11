@@ -4,7 +4,7 @@ import { isUuidValid } from '../helpers/isUuidValid';
 import { getPathSegments } from '../helpers/getPathSegments';
 import { sendError } from '../helpers/sendError';
 
-export const get = (req: IncomingMessage, res: ServerResponse, users: UserDB) => {
+export const remove = (req: IncomingMessage, res: ServerResponse, users: UserDB) => {
   const [url, id] = getPathSegments(req);
 
   switch (url) {
@@ -14,9 +14,9 @@ export const get = (req: IncomingMessage, res: ServerResponse, users: UserDB) =>
           const user = users.getUser(id);
 
           if (user) {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify(user));
+            users.delete(id);
+            res.statusCode = 204;
+            res.end();
           } else {
             sendError(res, 404, `User with id ${id} does not exist`);
           }
@@ -24,9 +24,7 @@ export const get = (req: IncomingMessage, res: ServerResponse, users: UserDB) =>
           sendError(res, 400, `Id ${id} is not valid uuid`);
         }
       } else {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(users.getUsers()));
+        sendError(res, 404, `Endpoint ${req.url} does not exist`);
       }
       break;
 

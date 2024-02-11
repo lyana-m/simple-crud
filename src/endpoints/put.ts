@@ -5,7 +5,7 @@ import { errors } from '../constants/errors';
 import { getPathSegments } from '../helpers/getPathSegments';
 import { isUuidValid } from '../helpers/isUuidValid';
 import { sendError } from '../helpers/sendError';
-import {isPutDataValid} from '../helpers/isPutDataValid';
+import { isPutDataValid } from '../helpers/isPutDataValid';
 
 export const put = (req: IncomingMessage, res: ServerResponse, users: UserDB) => {
   const [url, id] = getPathSegments(req);
@@ -50,7 +50,7 @@ export const put = (req: IncomingMessage, res: ServerResponse, users: UserDB) =>
                 sendError(res, 500, errors.INTERNAL_SERVER_ERROR);
               });
           } else {
-            sendError(res, 404, `User with ${id} does not exist`);
+            sendError(res, 404, `User with id ${id} does not exist`);
           }
         } else {
           sendError(res, 400, `Id ${id} is not valid uuid`);

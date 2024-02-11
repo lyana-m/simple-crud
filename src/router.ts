@@ -3,6 +3,7 @@ import { UserDB } from './db';
 import { get } from './endpoints/get';
 import { post } from './endpoints/post';
 import { put } from './endpoints/put';
+import { remove } from './endpoints/remove';
 
 const users = new UserDB();
 
@@ -21,7 +22,7 @@ export const router = (req: IncomingMessage, res: ServerResponse) => {
       break;
 
     case 'DELETE':
-      // delete(req, res);
+      remove(req, res, users);
       break;
 
     default:
