@@ -1,12 +1,13 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { v4 as uuidv4 } from 'uuid';
 import { URL } from 'url';
-import { users } from '../db';
+import { UserDB } from '../db';
 import { UserData } from '../types';
 import { isDataValid } from '../helpers/isDataValid';
 import { errors } from '../constants/errors';
+import { sendError } from '../helpers/sendError';
 
-export const post = (req: IncomingMessage, res: ServerResponse) => {
+export const post = (req: IncomingMessage, res: ServerResponse, users: UserDB) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
 
   switch (url.pathname) {
@@ -31,25 +32,22 @@ export const post = (req: IncomingMessage, res: ServerResponse) => {
               age: parsedData.age,
               hobbies: parsedData.hobbies,
             };
-            users.push(newUser);
+            users.add(newUser);
 
             res.statusCode = 201;
             res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify(newUser));
           } else {
-            res.statusCode = 400;
-            res.end(JSON.stringify(errors.INVALID_INPUT_FORMAT));
+            sendError(res, 400, errors.INVALID_INPUT_FORMAT);
           }
         })
         .on('error', () => {
-          res.statusCode = 500;
-          res.end(JSON.stringify(errors.INTERNAL_SERVER_ERROR));
+          sendError(res, 500, errors.INTERNAL_SERVER_ERROR);
         });
       break;
 
     default:
-      res.statusCode = 404;
-      res.end(`Endpoint ${req.url} does not exist`);
+      sendError(res, 404, `Endpoint ${req.url} does not exist`);
       break;
   }
 };
