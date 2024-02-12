@@ -1,11 +1,17 @@
 import 'dotenv/config';
 import http, { IncomingMessage, ServerResponse } from 'http';
 import { router } from './router';
+import { sendError } from './helpers/sendError';
+import { errors } from './constants/errors';
 
 const PORT = process.env.PORT || 4000;
 
-const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
-  router(req, res);
+export const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
+  try {
+    router(req, res);
+  } catch {
+    sendError(res, 500, errors.INTERNAL_SERVER_ERROR);
+  }
 });
 
 server.listen(PORT, () => {
