@@ -1,0 +1,17 @@
+{
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+  },
+  "compilerOptions": {
+    "outDir": "./dist",
+    "target": "ES6",
+    "allowJs": true,
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+  },
+  "include": [
+    "./src"
+  ]
+}
